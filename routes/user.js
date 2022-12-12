@@ -19,7 +19,7 @@ const {
     userValidator,
     adminValidator} = require('../middlewares/utils/validators')
 const protectedRoute = require('../middlewares/auth')
-
+ 
 router.route('/')
     .get(reqRecievedLogger, protectedRoute,  adminValidator, getUsers)
     .post(reqRecievedLogger,  userValidator, postUser)

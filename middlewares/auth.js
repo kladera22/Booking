@@ -14,11 +14,11 @@ const protectedRoute = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         req.user = await User.findById(decoded.id)
 
-        next();
+        next()
 
     } catch (err) {
         throw new Error(err.mesage)
     }
 }
 
-module.exports = protectedRoute;
+module.exports = protectedRoute
