@@ -1,9 +1,10 @@
+const user = require('./routes/user')
+const package = require('./routes/package')
 const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const logger = require('./middlewares/logger')
-const user = require('./routes/user')
 const error = require('./middlewares/error');
 const errorHandler = require('./middlewares/error');
 const connectDB = require('./config/db');
@@ -44,6 +45,7 @@ const limiter = rateLimit({
 app.use(limiter)
 
 app.use('/api/v1/user', user);
+app.use('/api/v1/package', package);
 
 app.use(errorHandler);
 

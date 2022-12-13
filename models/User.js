@@ -1,9 +1,9 @@
-const mongoose = require ('mongoose');
-const Schema = mongoose.Schema;
-const validator = require ('validator');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+const mongoose = require ('mongoose')
+const Schema = mongoose.Schema
+const validator = require ('validator')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 
 const UserSchema = new Schema ({
     firstName: {
@@ -39,8 +39,8 @@ const UserSchema = new Schema ({
     email: {
         type: String,
         required: true,
-        validate: (username) => {
-            return validator.isEmail(username)
+        validate: (email) => {
+            return validator.isEmail(email)
         }
     },
     resetPasswordToken: {
@@ -84,4 +84,4 @@ UserSchema.methods.getResetPasswordToken = function () {
     return resetToken
 }
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema)
