@@ -6,16 +6,22 @@ const {
     deletePackages,
     getPackage,
     updatePackage,
-    deletePackage
+    deletePackage,
+    getPackageBookings,
+    postPackageBooking,
+    deletePackageBookings,
+    getPackageBooking,
+    updatePackageBooking,
+    deletePackageBooking
 } = require('../controllers/packageController');
 
 const reqRecievedLogger = require('../middlewares/reqRecievedLogger');
 const {
     packageValidator,
-    adminValidator,
+    adminValidator
 } = require('../middlewares/utils/validators');
 
-const protectedRoute = require('../middlewares/auth')
+const protectedRoute = require('../middlewares/auth') 
 
 router.route('/')
     .get(reqRecievedLogger, getPackages)
@@ -26,5 +32,15 @@ router.route('/:packageId')
     .get(reqRecievedLogger, getPackage)
     .put(reqRecievedLogger, protectedRoute, adminValidator, updatePackage)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackage)
+
+router.route('/:packageId/bookings')
+    .get(reqRecievedLogger, getPackageBookings)
+    .post(reqRecievedLogger, postPackageBooking)
+    .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBookings)
+    
+router.route('/:packageId/bookings/:bookingId')
+    .get(reqRecievedLogger, getPackageBooking)
+    .put(reqRecievedLogger, protectedRoute, updatePackageBooking)
+    .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBooking)
 
 module.exports = router;

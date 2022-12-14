@@ -1,9 +1,11 @@
-const Package = require('../models/Package');
+const Package = require('../models/Package')
+const User = require('../models/User')
+
 
 const getPackages = async (req, res, next) => {
 
-    const filter = {};
-    const options = {};
+    const filter = {}
+    const options = {}
 
     if(Object.keys(req.query).length){
         const{
@@ -28,12 +30,12 @@ const getPackages = async (req, res, next) => {
       
         if(limit)options.limit = limit
         if(sortByPrice) options.sort = {
-            age: sortByPrice === 'asc' ? 1 : -1 
+            price: sortByPrice === 'asc' ? 1 : -1 
         }
     }
 
     try {
-        const packages = await Package.find({}, filter, options);
+        const packages = await Package.find({}, filter, options)
 
         res
         .status(200)
@@ -41,14 +43,14 @@ const getPackages = async (req, res, next) => {
         .json(packages)
         
     } catch (err) {
-        throw new Error (`Error retrieving packages: ${err.message}`);
+        throw new Error (`Error retrieving packages: ${err.message}`)
     }
 }
 
 const postPackage = async (req, res, next) => {
 
     try {
-        const package = await Package.create(req.body);
+        const package = await Package.create(req.body)
 
         res
         .status(201)
@@ -56,14 +58,14 @@ const postPackage = async (req, res, next) => {
         .json(package)
 
     } catch (err) {
-        throw new Error (`Error creating package: ${err.message}`);
+        throw new Error (`Error creating package: ${err.message}`)
     }
 }
 
 const deletePackages = async (req, res, next) => {
 
     try {
-        await Package.deleteMany();
+        await Package.deleteMany()
 
         res
         .status(200)
@@ -79,7 +81,7 @@ const deletePackages = async (req, res, next) => {
 const getPackage = async (req, res, next) => {
 
     try {
-        const package = await Package.findById(req.params.packageId);
+        const package = await Package.findById(req.params.packageId)
 
         res
         .status(200)
@@ -98,7 +100,7 @@ const updatePackage = async (req, res, next) => {
             $set: req.body
         },{
             new: true,
-        });
+        })
 
         res
         .status(200)
@@ -125,6 +127,138 @@ const deletePackage = async (req, res, next) => {
     })
 }
 
+const getPackageBookings = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId)
+        const bookings = package.bookings
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(user, bookings)
+                
+    } catch (err) {
+        throw new Error(`Error retrieving bookings: ${err.message}`)
+    }
+}
+
+const postPackageBooking = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId)
+        package.bookings.push(req.body)
+    
+        const booking = await package.save()
+        const arr = []
+ 
+        const finalBooking = booking
+
+        await Promise.all(package.bookings.map(async booking=>{
+            const bookings = await User.findById(booking.user)
+            arr.push (bookings)
+        }))
+        
+        finalBooking.bookings = arr
+        console.log(finalBooking)
+        
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(finalBooking)
+    }
+
+    catch (err) {
+        throw new Error(`Error creating bookings: ${err.message}`)
+    }
+}
+
+const deletePackageBookings = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId)
+        package.bookings = []
+
+        await package.save()
+      
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({
+            success: true, msg: `Delete all bookings for package id:${req.params.packageId}`
+        })
+    }
+
+    catch (err) {
+        throw new Error(`Error deleting bookings: ${err.message}`)
+    }
+}
+
+const getPackageBooking = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        const booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId))
+
+        if(!booking) {booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}}
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(booking)
+
+    } catch (err) {
+        throw new Error(`Error retrieving booking id: ${err.message}`)
+    }
+}
+
+const updatePackageBooking = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        let booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId))
+
+            if(booking) {
+                const bookingIndexPosition = package.bookings.indexOf(booking);
+                package.bookings.splice(bookingIndexPosition, 1, req.body);
+                booking = package.bookings[bookingIndexPosition];
+                await package.save();
+            }
+            else {
+                booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}
+            }
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(booking)
+
+    } catch (err) {
+        throw new Error(`Error updating booking id: ${err.message}`)
+    }
+}
+
+const deletePackageBooking = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        let booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId));
+        
+        if(booking) {
+            const bookingIndexPosition = package.bookings.indexOf(booking);
+            package.bookings.splice(bookingIndexPosition, 1);
+            await package.save();
+        }
+        else {
+            booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}
+        }
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({
+            success: true, msg: `Delete booking with id:${req.params.bookingId}`
+        })
+
+    } catch (err) {
+        throw new Error(`Error deleting booking id: ${err.message}`)
+    }
+}
+
 
 module.exports = {
     getPackages,
@@ -132,7 +266,13 @@ module.exports = {
     deletePackages,
     getPackage,
     updatePackage,
-    deletePackage
+    deletePackage,
+    getPackageBookings,
+    postPackageBooking,
+    deletePackageBookings,
+    getPackageBooking,
+    updatePackageBooking,
+    deletePackageBooking
 }
 
 

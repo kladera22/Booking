@@ -26,18 +26,6 @@ const userValidator = (req, res, next) => {
 const adminValidator = (req, res, next) => {
     if(req.user.admin) {
         next()
-    } 
-    else {
-        res
-        .status(403)
-        .setHeader('Content-Type', 'application/json')
-        .json({success: false, mgs: 'Unauthorized to access this resource!'})
-    }
-}
-
-const customValidator = (req, res, next) => {
-    if(!req.user.admin) {
-        next()
     }
     else {
         res
@@ -74,31 +62,8 @@ const packageValidator = (req, res, next) => {
         }
 }
 
-const bookingValidator = (req, res, next) => {
-    if(req.body){
-        if(
-            !req.body.package_id){
-            res
-            .status(400)
-            .setHeader('Content-Type', 'text/plain')
-            .json({
-                success: false, msg: 'Missing Required Fields'
-            })
-        }
-        else{
-            next()
-        }
-    }
-
-    else{
-        res.end(`Request for path: ${req.protocol} and method: ${req.method} is missing payload`)
-        }
-}
-
 module.exports = {
     userValidator,
     adminValidator,
-    customValidator,
-    packageValidator,
-    bookingValidator
+    packageValidator
 }

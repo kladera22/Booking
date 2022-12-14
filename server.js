@@ -5,21 +5,21 @@ const dotenv = require('dotenv')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const logger = require('./middlewares/logger')
-const error = require('./middlewares/error');
-const errorHandler = require('./middlewares/error');
-const connectDB = require('./config/db');
-const cookieParser = require('cookie-parser');
-const fileupload = require('express-fileupload');
-const cors = require('cors');
-const mongoSanitize = require('express-mongo-sanitize');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const hpp = require('hpp');
-const xss = require('xss-clean');
+const error = require('./middlewares/error')
+const errorHandler = require('./middlewares/error')
+const connectDB = require('./config/db')
+const cookieParser = require('cookie-parser')
+const fileupload = require('express-fileupload')
+const cors = require('cors')
+const mongoSanitize = require('express-mongo-sanitize')
+const rateLimit = require('express-rate-limit')
+const helmet = require('helmet')
+const hpp = require('hpp')
+const xss = require('xss-clean')
 
 dotenv.config({ path: './config/config.env'})
 
-connectDB();
+connectDB()
 
 const app = express()
 
@@ -44,18 +44,18 @@ const limiter = rateLimit({
 
 app.use(limiter)
 
-app.use('/api/v1/user', user);
-app.use('/api/v1/package', package);
+app.use('/api/v1/user', user)
+app.use('/api/v1/package', package)
 
-app.use(errorHandler);
+app.use(errorHandler)
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5001
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}`)
 })
 
 process.on('unhandledRejection', (err, promise) => {
-    console.log(`Error: ${err.message}`);
+    console.log(`Error: ${err.message}`)
     server.close(() => process.exit(1))
 })
