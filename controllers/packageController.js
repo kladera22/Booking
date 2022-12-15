@@ -1,11 +1,6 @@
 const Package = require('../models/Package')
 const User = require('../models/User')
 
-// tests
-// tests 2
-// tests 3
-// test 4
-
 const getPackages = async (req, res, next) => {
 
     const filter = {}
