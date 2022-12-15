@@ -130,12 +130,12 @@ const deletePackage = async (req, res, next) => {
 const getPackageBookings = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
-        const bookings = package.bookings
+      //  const bookings = package.bookings.find().populate('BookingSchema')
 
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json(user, bookings)
+        .json(package)
                 
     } catch (err) {
         throw new Error(`Error retrieving bookings: ${err.message}`)
@@ -145,25 +145,19 @@ const getPackageBookings = async (req, res, next) => {
 const postPackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
-        package.bookings.push(req.body)
+        console.log(package)
+
+        const user = await User.findById(req.body.user)
+        package.bookings.push(user)
+
+        console.log('this is a user', user)
     
         const booking = await package.save()
-        const arr = []
- 
-        const finalBooking = booking
-
-        await Promise.all(package.bookings.map(async booking=>{
-            const bookings = await User.findById(booking.user)
-            arr.push (bookings)
-        }))
-        
-        finalBooking.bookings = arr
-        console.log(finalBooking)
-        
+      
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json(finalBooking)
+        .json(booking)
     }
 
     catch (err) {

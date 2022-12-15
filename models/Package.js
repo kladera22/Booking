@@ -47,7 +47,7 @@ const PackageSchema = new Schema ({
         required: true
     },
 
-    bookings: [BookingSchema]
+    bookings: []
 },{
     timestamps: true
 })
