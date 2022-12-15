@@ -2,6 +2,7 @@ const Package = require('../models/Package')
 const User = require('../models/User')
 
 // tests
+// tests 2
 
 const getPackages = async (req, res, next) => {
 
