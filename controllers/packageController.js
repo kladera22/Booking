@@ -1,6 +1,7 @@
 const Package = require('../models/Package')
 const User = require('../models/User')
 
+// tests
 
 const getPackages = async (req, res, next) => {
 
@@ -130,7 +131,6 @@ const deletePackage = async (req, res, next) => {
 const getPackageBookings = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
-      //  const bookings = package.bookings.find().populate('BookingSchema')
 
         res
         .status(200)
@@ -145,12 +145,8 @@ const getPackageBookings = async (req, res, next) => {
 const postPackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
-        console.log(package)
-
         const user = await User.findById(req.body.user)
         package.bookings.push(user)
-
-        console.log('this is a user', user)
     
         const booking = await package.save()
       
