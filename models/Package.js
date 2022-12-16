@@ -44,7 +44,8 @@ const PackageSchema = new Schema ({
     },
     slot: {
         type: Number,
-        required: true
+        required: true,
+        default: 1
     },
 
     bookings: []

@@ -30,7 +30,7 @@ router.route('/login')
 
 router.route('/forgotPassword')
     .post(reqRecievedLogger, forgotPassword)
-
+ 
 router.route('/resetPassword')
     .put(reqRecievedLogger,  resetPassword)
 

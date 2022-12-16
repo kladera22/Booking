@@ -196,31 +196,6 @@ const getPackageBooking = async (req, res, next) => {
     }
 }
 
-const updatePackageBooking = async (req, res, next) => {
-    try {
-        const package = await Package.findById(req.params.packageId);
-        let booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId))
-
-            if(booking) {
-                const bookingIndexPosition = package.bookings.indexOf(booking);
-                package.bookings.splice(bookingIndexPosition, 1, req.body);
-                booking = package.bookings[bookingIndexPosition];
-                await package.save();
-            }
-            else {
-                booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}
-            }
-
-        res
-        .status(200)
-        .setHeader('Content-Type', 'application/json')
-        .json(booking)
-
-    } catch (err) {
-        throw new Error(`Error updating booking id: ${err.message}`)
-    }
-}
-
 const deletePackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId);
@@ -259,7 +234,6 @@ module.exports = {
     postPackageBooking,
     deletePackageBookings,
     getPackageBooking,
-    updatePackageBooking,
     deletePackageBooking
 }
 
