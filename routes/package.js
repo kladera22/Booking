@@ -22,7 +22,8 @@ const {
 
 const protectedRoute = require('../middlewares/auth')
 const {
-    availableSlot
+    availableSlot,
+    alreadyBooked
  } = require('../middlewares/availableSlot')
 
 
@@ -38,7 +39,7 @@ router.route('/:packageId')
 
 router.route('/:packageId/bookings')
     .get(reqRecievedLogger, getPackageBookings)
-    .post(reqRecievedLogger, availableSlot, postPackageBooking)
+    .post(reqRecievedLogger, availableSlot, alreadyBooked, postPackageBooking)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBookings)
     
 router.route('/:packageId/bookings/:bookingId')
