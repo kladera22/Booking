@@ -11,13 +11,14 @@ const {
     forgotPassword,
     resetPassword,
     updatePassword,
-    logout
+    logout,
 } = require('../controllers/userController')
 
 const reqRecievedLogger = require('../middlewares/reqRecievedLogger')
 const {
     userValidator,
-    adminValidator} = require('../middlewares/utils/validators')
+    adminValidator,
+    customValidator} = require('../middlewares/utils/validators')
 const protectedRoute = require('../middlewares/auth')
  
 router.route('/')

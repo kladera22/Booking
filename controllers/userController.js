@@ -1,5 +1,6 @@
 const User = require('../models/User');
-const crypto = require('crypto')
+const crypto = require('crypto');
+const Package = require('../models/Package');
 
 const getUsers = async (req, res, next) => {
 
@@ -75,7 +76,8 @@ const deleteUsers = async (req, res, next) => {
 const getUser = async (req, res, next) => {
 
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.params.userId)
+
 
         res
         .status(200)
@@ -119,6 +121,21 @@ const deleteUser = async (req, res, next) => {
     .json({
         success: true, msg: `Delete user id: ${req.params.userId}`
     })
+}
+
+
+const getUserBooks = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.UserId)
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(user)
+                
+    } catch (err) {
+        throw new Error(`Error retrieving bookings: ${err.message}`)
+    }
 }
 
 const login = async (req, res, next) => {
@@ -234,7 +251,7 @@ module.exports = {
     forgotPassword,
     resetPassword,
     updatePassword,
-    logout
+    logout,
 }
 
 

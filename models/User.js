@@ -5,6 +5,13 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 
+const BooksSchema = new Schema ({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'Package'
+    }
+})
+
 const UserSchema = new Schema ({
     firstName: {
         type: String,
@@ -52,7 +59,9 @@ const UserSchema = new Schema ({
     admin: {
         type: Boolean,
         default: false
-    } 
+    },
+    books: [BooksSchema]
+    
 },{
     timestamps: true
 })

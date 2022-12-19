@@ -128,7 +128,7 @@ const deletePackage = async (req, res, next) => {
 
 const getPackageBookings = async (req, res, next) => {
     try {
-        const package = await Package.findById(req.params.packageId)
+        const package = await Package.findById(req.params.packageId).populate('bookings',['firstName','lastName','username','age','email'])
 
         res
         .status(200)
@@ -144,9 +144,15 @@ const postPackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
         const user = await User.findById(req.body.user)
+        
+        user.books.push(package)
         package.bookings.push(user)
-    
-        const booking = await package.save()
+
+        await user.save()
+        await package.save()
+
+        const booking = await Package.findById(req.params.packageId).populate('bookings',['firstName','lastName','username','age','email'])
+
       
         res
         .status(200)
