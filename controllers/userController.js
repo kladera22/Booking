@@ -123,21 +123,6 @@ const deleteUser = async (req, res, next) => {
     })
 }
 
-
-const getUserBooks = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.UserId)
-
-        res
-        .status(200)
-        .setHeader('Content-Type', 'application/json')
-        .json(user)
-                
-    } catch (err) {
-        throw new Error(`Error retrieving bookings: ${err.message}`)
-    }
-}
-
 const login = async (req, res, next) => {
     const {username, password} = req.body;
 

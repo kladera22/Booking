@@ -38,7 +38,7 @@ router.route('/:packageId')
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackage)
 
 router.route('/:packageId/bookings')
-    .get(reqRecievedLogger, getPackageBookings)
+    .get(reqRecievedLogger, getPackageBookings) 
     .post(reqRecievedLogger, availableSlot, alreadyBooked, postPackageBooking)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBookings)
     

@@ -17,8 +17,8 @@ const {
 const reqRecievedLogger = require('../middlewares/reqRecievedLogger')
 const {
     userValidator,
-    adminValidator,
-    customValidator} = require('../middlewares/utils/validators')
+    adminValidator
+} = require('../middlewares/utils/validators')
 const protectedRoute = require('../middlewares/auth')
  
 router.route('/')

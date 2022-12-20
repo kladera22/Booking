@@ -35,18 +35,6 @@ const adminValidator = (req, res, next) => {
     }
 }
 
-const customValidator = (req, res, next) => {
-    if(!req.user.admin) {
-        next()
-    }
-    else {
-        res
-        .status(403)
-        .setHeader('Content-Type', 'application/json')
-        .json({success: false, mgs: 'Unauthorized to access this resource!'})
-    }
-}
-
 const packageValidator = (req, res, next) => {
     if(req.body){
         if(
@@ -79,6 +67,5 @@ const packageValidator = (req, res, next) => {
 module.exports = {
     userValidator,
     adminValidator,
-    packageValidator,
-    customValidator
+    packageValidator
 }

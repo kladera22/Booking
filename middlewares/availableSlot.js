@@ -5,7 +5,7 @@ const alreadyBooked = async (req, res, next) => {
     const package = await Package.findById(req.params.packageId)
     const user = await User.findById(req.body.user)
     const bookings = package.bookings
-
+    console.log(bookings)
     if(bookings.every(bookings => bookings.userId !== user.userId)){
         next()
     } 
@@ -16,7 +16,7 @@ const alreadyBooked = async (req, res, next) => {
         .json({
             success: false, msg: 'Already Booked'
         })
-    }
+    } 
 }
 
 const availableSlot = async (req, res, next) => {

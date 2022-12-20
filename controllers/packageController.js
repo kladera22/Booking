@@ -1,5 +1,7 @@
+const { userValidator } = require('../middlewares/utils/validators')
 const Package = require('../models/Package')
 const User = require('../models/User')
+const nodemailer = require('nodemailer')
 
 const getPackages = async (req, res, next) => {
 
@@ -141,6 +143,13 @@ const getPackageBookings = async (req, res, next) => {
 }
 
 const postPackageBooking = async (req, res, next) => {
+    const emailTransporter = nodemailer.createTransport({
+        service: 'outlook',
+        auth: {
+            user: 'LetsGoTravelAndTour@outlook.com',
+            pass: 'Letsgotravel&tour'
+        }
+    });
     try {
         const package = await Package.findById(req.params.packageId)
         const user = await User.findById(req.body.user)
@@ -153,6 +162,27 @@ const postPackageBooking = async (req, res, next) => {
 
         const booking = await Package.findById(req.params.packageId).populate('bookings',['firstName','lastName','username','age','email'])
 
+        const toCustomerEmail = {
+            from: 'LetsGoTravelAndTour@outlook.com',
+            to: user.email,
+            subject: 'Booking Confirm',
+            html: 
+            `<h2> Dear ${user.firstName} ${user.lastName}, </h2>
+
+            <p> Your Booking is Confirm.  </p>
+
+            Best regards, <br>
+            <b> ${`Let's Go Travel & Tour`}
+            `
+        }
+
+    emailTransporter.sendMail(toCustomerEmail, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    })
       
         res
         .status(200)
@@ -168,10 +198,17 @@ const postPackageBooking = async (req, res, next) => {
 const deletePackageBookings = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId)
-        package.bookings = []
+        const booking = package.bookings.find(booking => (booking._id))
 
+        if (booking) {
+            const user = await User.findById(booking._id)
+            user.books = []
+            await user.save()
+        }
+
+        package.bookings = []
         await package.save()
-      
+        
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
@@ -188,9 +225,9 @@ const deletePackageBookings = async (req, res, next) => {
 const getPackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId);
-        const booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId))
+        const booking = package.bookings.find(booking => (booking._id).equals(req.params.userId))
 
-        if(!booking) {booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}}
+        if(!booking) {booking = {success:false, msg: `No booking found with user id: ${req.params.userId}`}}
 
         res
         .status(200)
@@ -198,14 +235,14 @@ const getPackageBooking = async (req, res, next) => {
         .json(booking)
 
     } catch (err) {
-        throw new Error(`Error retrieving booking id: ${err.message}`)
+        throw new Error(`Error retrieving booking with user id: ${err.message}`)
     }
 }
 
 const deletePackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId);
-        let booking = package.bookings.find(booking => (booking._id).equals(req.params.bookingId));
+        let booking = package.bookings.find(booking => (booking._id).equals(req.params.userId));
         
         if(booking) {
             const bookingIndexPosition = package.bookings.indexOf(booking);
@@ -213,18 +250,18 @@ const deletePackageBooking = async (req, res, next) => {
             await package.save();
         }
         else {
-            booking = {success:false, msg: `No booking found with booking id: ${req.params.bookingId}`}
+            booking = {success:false, msg: `No booking found with user id: ${req.params.userId}`}
         }
 
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
         .json({
-            success: true, msg: `Delete booking with id:${req.params.bookingId}`
+            success: true, msg: `Delete booking with user with id:${req.params.userId}`
         })
 
     } catch (err) {
-        throw new Error(`Error deleting booking id: ${err.message}`)
+        throw new Error(`Error deleting booking with user id: ${err.message}`)
     }
 }
 
