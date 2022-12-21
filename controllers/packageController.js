@@ -1,4 +1,3 @@
-const { userValidator } = require('../middlewares/utils/validators')
 const Package = require('../models/Package')
 const User = require('../models/User')
 const nodemailer = require('nodemailer')
@@ -169,7 +168,11 @@ const postPackageBooking = async (req, res, next) => {
             html: 
             `<h2> Dear ${user.firstName} ${user.lastName}, </h2>
 
-            <p> Your Booking is Confirm.  </p>
+            <p> Congratulations! 
+            Your booking has been confirmed. Thank you for choosing our service. 
+            We look forward to welcoming you on your chosen date and providing you with an unforgettable experience. 
+            Please make sure to bring a printed copy of your booking confirmation, as well as any necessary documents, with you on the day of your booking. 
+            If you have any questions or concerns, don't hesitate to contact us. We hope you have a wonderful time with us! </p>
 
             Best regards, <br>
             <b> ${`Let's Go Travel & Tour`}
@@ -202,10 +205,11 @@ const deletePackageBookings = async (req, res, next) => {
 
         if (booking) {
             const user = await User.findById(booking._id)
-            user.books = []
+            const bookIndexPosition = package.bookings.indexOf(user)
+            user.books.splice(bookIndexPosition, 1)
             await user.save()
         }
-
+    
         package.bookings = []
         await package.save()
         
@@ -224,9 +228,10 @@ const deletePackageBookings = async (req, res, next) => {
 
 const getPackageBooking = async (req, res, next) => {
     try {
-        const package = await Package.findById(req.params.packageId);
-        const booking = package.bookings.find(booking => (booking._id).equals(req.params.userId))
+        const package = await Package.findById(req.params.packageId).populate('bookings',['firstName','lastName','username','age','email'])
 
+        let booking = package.bookings.find(booking => (booking._id).equals(req.params.userId))
+        
         if(!booking) {booking = {success:false, msg: `No booking found with user id: ${req.params.userId}`}}
 
         res
@@ -243,6 +248,13 @@ const deletePackageBooking = async (req, res, next) => {
     try {
         const package = await Package.findById(req.params.packageId);
         let booking = package.bookings.find(booking => (booking._id).equals(req.params.userId));
+
+         if (booking) {
+            const user = await User.findById(booking._id)
+            const bookIndexPosition = package.bookings.indexOf(user)
+            user.books.splice(bookIndexPosition, 1)
+            await user.save()
+        }
         
         if(booking) {
             const bookingIndexPosition = package.bookings.indexOf(booking);

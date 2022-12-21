@@ -5,8 +5,8 @@ const alreadyBooked = async (req, res, next) => {
     const package = await Package.findById(req.params.packageId)
     const user = await User.findById(req.body.user)
     const bookings = package.bookings
-    console.log(bookings)
-    if(bookings.every(bookings => bookings.userId !== user.userId)){
+
+    if(bookings.every(bookings => bookings.userId !== user)){
         next()
     } 
     else {

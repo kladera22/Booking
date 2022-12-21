@@ -42,7 +42,7 @@ router.route('/:packageId/bookings')
     .post(reqRecievedLogger, availableSlot, alreadyBooked, postPackageBooking)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBookings)
     
-router.route('/:packageId/bookings/:bookingId')
+router.route('/:packageId/bookings/:userId')
     .get(reqRecievedLogger, getPackageBooking)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBooking)
 
