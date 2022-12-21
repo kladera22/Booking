@@ -15,7 +15,9 @@
 ## General info
 Let’s Go Travel & Tours can assist you in finding places to visit with your friendly budget. It has tour inclusions that will make your journey more smoother. You only need to search and book.
 
-<div align="center">Welcome to Let’s Go Travel & Tours. 
+<div align="center">Welcome to Let’s Go Travel & Tours. </div>
+<br/>
+<br/>
 
 ## Project Demo 
 [Click to view site](https://)
