@@ -205,8 +205,10 @@ const deletePackageBookings = async (req, res, next) => {
 
         if (booking) {
             const user = await User.findById(booking._id)
+            console.log(user)
             const bookIndexPosition = package.bookings.indexOf(user)
             user.books.splice(bookIndexPosition, 1)
+            console.log(user)
             await user.save()
         }
     

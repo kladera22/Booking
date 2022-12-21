@@ -3,10 +3,10 @@ const User = require("../models/User")
 
 const alreadyBooked = async (req, res, next) => {
     const package = await Package.findById(req.params.packageId)
-    const user = await User.findById(req.body.user)
-    const bookings = package.bookings
+  //  const user = await User.findById(req.body.user)
+    let booking = package.bookings.find(booking => (booking._id).equals(req.body.user))
 
-    if(bookings.every(bookings => bookings.userId !== user)){
+    if(!booking){
         next()
     } 
     else {
