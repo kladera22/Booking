@@ -276,7 +276,116 @@ const deletePackageBooking = async (req, res, next) => {
         throw new Error(`Error deleting booking with user id: ${err.message}`)
     }
 }
+//////////////////////////////////////////////////////////////////
+const getPackageRatings = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        const ratings = package.ratings;
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(ratings)
+                
+    } catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`);
+    }
+}
 
+const postPackageRating = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        package.ratings.push(req.body);
+        const result = await package.save();
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(result)
+    }
+    catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`);
+    }
+}
+const deletePackageRatings = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        package.ratings = [];
+        await package.save();
+      
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({
+            success: true, msg: `delete all ratings for package id:${req.params.packageId}`
+        })
+    }
+    catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`);
+    }
+}
+
+const getPackageRating = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        const rating = package.ratings.find(rating => (rating._id).equals(req.params.ratingId))
+
+        if(!rating) {rating = {success:false, msg: `No rating found with rating id: ${req.params.ratingId}`}}
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(rating)
+    } catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`)
+    }
+}
+const updatePackageRating = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        let rating = package.ratings.find(rating => (rating._id).equals(req.params.ratingId))
+            if(rating) {
+                const ratingIndexPosition = package.ratings.indexOf(rating);
+                package.ratings.splice(ratingIndexPosition, 1, req.body);
+                rating = package.ratings[ratingIndexPosition];
+                await package.save();
+            }
+            else {
+                rating = {success:false, msg: `No rating found with rating id: ${req.params.ratingId}`}
+            }
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json(rating)
+
+    } catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`)
+    }
+}
+const deletePackageRating = async (req, res, next) => {
+    try {
+        const package = await Package.findById(req.params.packageId);
+        let rating = package.ratings.find(rating => (rating._id).equals(req.params.ratingId));
+        
+        if(rating) {
+            const ratingIndexPosition = package.ratings.indexOf(rating);
+            package.ratings.splice(ratingIndexPosition, 1);
+            await package.save();
+        }
+        else {
+            rating = {success:false, msg: `No rating found with rating id: ${req.params.ratingId}`}
+        }
+
+        res
+        .status(200)
+        .setHeader('Content-Type', 'application/json')
+        .json({
+            success: true, msg: `delete rating with id:${req.params.ratingId}`
+        })
+
+    } catch (err) {
+        throw new Error(`Error retrieving ratings: ${err.message}`)
+    }
+}
 
 module.exports = {
     getPackages,
@@ -289,7 +398,13 @@ module.exports = {
     postPackageBooking,
     deletePackageBookings,
     getPackageBooking,
-    deletePackageBooking
+    deletePackageBooking,
+    getPackageRatings,
+    postPackageRating,
+    deletePackageRatings,
+    getPackageRating,
+    updatePackageRating,
+    deletePackageRating
 }
 
 

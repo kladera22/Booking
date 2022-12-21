@@ -1,12 +1,22 @@
 const mongoose = require ('mongoose')
 const Schema = mongoose.Schema
 
-// const BookingSchema = new Schema ({
-//     user: {
-//         type: Schema.Types.ObjectId,
-//         ref: 'User'
-//     }
-// })
+const RatingSchema = new Schema ({
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        required: true
+    },
+    text:{
+        type: String,
+        required: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
+})
 
 const PackageSchema = new Schema ({
     title: {
@@ -50,7 +60,8 @@ const PackageSchema = new Schema ({
     bookings: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    ratings: [RatingSchema]
 },{
     timestamps: true
 })

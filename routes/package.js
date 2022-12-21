@@ -11,7 +11,13 @@ const {
     postPackageBooking,
     deletePackageBookings,
     getPackageBooking,
-    deletePackageBooking
+    deletePackageBooking,
+    getPackageRatings,
+    postPackageRating,
+    deletePackageRatings,
+    getPackageRating,
+    updatePackageRating,
+    deletePackageRating
 } = require('../controllers/packageController');
 
 const reqRecievedLogger = require('../middlewares/reqRecievedLogger');
@@ -45,5 +51,15 @@ router.route('/:packageId/bookings')
 router.route('/:packageId/bookings/:userId')
     .get(reqRecievedLogger, getPackageBooking)
     .delete(reqRecievedLogger, protectedRoute, adminValidator, deletePackageBooking)
+
+router.route('/:packageId/ratings')
+    .get(reqRecievedLogger, getPackageRatings) 
+    .post(reqRecievedLogger, protectedRoute, postPackageRating)
+    .delete(reqRecievedLogger, protectedRoute, deletePackageRatings)
+    
+router.route('/:packageId/ratings/:ratingId')
+    .get(reqRecievedLogger, getPackageRating) 
+    .put(reqRecievedLogger, protectedRoute, updatePackageRating)
+    .delete(reqRecievedLogger, protectedRoute, deletePackageRating)
 
 module.exports = router;
