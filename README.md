@@ -76,10 +76,3 @@ Overall, my goal with "Let's Go Travel & Tours" is to make travel planning simpl
 ## Contact
 Created by [Kara Ladera](https://www.linkedin.com/in/karaladera)
 Feel free to contact me for any questions!
-
-## License
-[Click to view](https://github.com/kladera22)
-
-
-has context menu
-Compose
