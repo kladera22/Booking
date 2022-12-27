@@ -3,6 +3,7 @@
 
 ## Table of contents
 * [General info](#general-info)
+* [Project Video](#project-video)
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
@@ -12,6 +13,9 @@
 
 ## General info
 Let’s Go Travel & Tours can assist you in finding places to visit with your friendly budget. It has tour inclusions that will make your journey more smoother. You only need to search and book.
+
+## Project Video
+[Click to view demo of Let's Go Travel & Tours](https://drive.google.com/file/d/1GUfAEP4BeVZx_NltFs5xlAObEZFyjH-T/view?usp=sharing)
 
 ## Technologies
 ### Backend Development 
